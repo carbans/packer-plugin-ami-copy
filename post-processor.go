@@ -151,7 +151,13 @@ func (p *PostProcessor) PostProcess(
 						sess = currSession.Copy(&aws.Config{Region: aws.String(ami.region)})
 					)
 					conn = ec2.New(sess, &aws.Config{
-						Credentials: stscreds.NewCredentials(sess, role),
+						Credentials: stscreds.NewCredentials(
+							sess,
+							role,
+							func(p *stscreds.AssumeRoleProvider) {
+											p.ExternalID = aws.String("1cw23sd2-44dd-1532-22h2-kl433d2j748")				            	
+							},
+						),
 					})
 				} else {
 					conn = ec2.New(currSession.Copy(&aws.Config{Region: aws.String(ami.region)}))
